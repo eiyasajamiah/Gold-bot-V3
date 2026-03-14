@@ -382,7 +382,7 @@ def _handle_cmd(cid: str, nm: str, txt: str):
             "━━━━━━━━━━━━━━━━━━━━━━━\n"
             "💰 <b>التبرع عبر USDT</b>\n"
             "🔗 <b>الشبكة: BEP20 (BSC)</b>\n\n"
-            "<code>0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db</code>\n\n"
+            "<code>0xB5B3BEEeAc48415536b5E777a5B850FdCf9A8159</code>\n\n"
             "⚠️ <b>تنبيه مهم:</b>\n"
             "تأكد من اختيار شبكة <b>BEP20 / BSC</b> عند الإرسال\n"
             "إرسال على شبكة أخرى قد يؤدي لفقدان الأموال\n\n"
