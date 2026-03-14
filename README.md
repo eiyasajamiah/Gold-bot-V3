@@ -26,45 +26,6 @@
 - إغلاق شمعة 5m أو 15m جديدة
 - مرور 5 دقائق (إجباري)
 
----
-
-## 🚀 التشغيل على GitHub Actions (مجاناً)
-
-### الخطوة 1 — Fork المستودع
-اضغط **Fork** في أعلى يمين هذه الصفحة
-
-### الخطوة 2 — إضافة Secrets
-في مستودعك: **Settings → Secrets → Actions → New repository secret**
-
-| الاسم | القيمة |
-|---|---|
-| `TELEGRAM_TOKEN` | توكن البوت من [@BotFather](https://t.me/BotFather) |
-| `TELEGRAM_CHAT_ID` | رقم الـ Chat ID (من [@userinfobot](https://t.me/userinfobot)) |
-
-### الخطوة 3 — تفعيل Actions
-- اذهب إلى **Actions** في مستودعك
-- اضغط **Enable GitHub Actions**
-- البوت يبدأ تلقائياً كل دقيقة ✅
-
----
-
-## 💻 التشغيل المحلي
-
-```bash
-# 1. استنساخ المستودع
-git clone https://github.com/YOUR_USERNAME/gold-bot.git
-cd gold-bot
-
-# 2. تثبيت المتطلبات
-pip install -r requirements.txt
-
-# 3. إعداد الإعدادات
-cp config.example.json config.json
-# عدّل config.json بتوكنك وchat_id
-
-# 4. تشغيل البوت
-python unified_gold_bot.py
-```
 
 ---
 
@@ -94,38 +55,6 @@ python unified_gold_bot.py
 ```
 
 **أولوية SL/TP:** OBinOB → V7 → SMC
-
----
-
-## ⚙️ ضبط الإعدادات (config.json)
-
-```json
-{
-  "TRIGGER_PRICE_CHANGE_PCT": 0.04,    ← حساسية السعر (0.03 = أكثر حساسية)
-  "TRIGGER_FORCE_EVERY_MIN": 5,        ← تشغيل إجباري كل N دقيقة
-  "UNIFIED_MIN_AGREE": 2,             ← الحد الأدنى للتوافق (2 أو 3)
-  "MIN_RR": 1.5,                      ← أدنى نسبة مخاطرة/عائد
-  "OB_MIN_RR": 1.8                    ← أدنى R:R لـ OBinOB
-}
-```
-
----
-
-## 📊 هيكل الملفات
-
-```
-gold-bot/
-├── unified_gold_bot.py     ← البوت الرئيسي
-├── config.json             ← الإعدادات (لا ترفعه!)
-├── requirements.txt        ← المتطلبات
-├── .github/
-│   └── workflows/
-│       └── bot.yml         ← GitHub Actions
-├── charts/                 ← الرسوم البيانية المولّدة
-├── logs/                   ← ملفات السجل
-├── subscribers.json        ← قائمة المشتركين
-└── performance.json        ← سجل الأداء
-```
 
 ---
 
