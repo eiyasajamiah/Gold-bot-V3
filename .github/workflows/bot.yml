@@ -38,6 +38,8 @@ jobs:
             "TELEGRAM_TOKEN":  "$TELEGRAM_TOKEN",
             "TELEGRAM_CHAT_ID": "$TELEGRAM_CHAT_ID",
             "CLAUDE_API_KEY":  "$CLAUDE_API_KEY",
+            "CLAUDE_PROVIDER": "$CLAUDE_PROVIDER",
+            "CLAUDE_MODEL":    "claude-sonnet-4-5-20251001",
             "SYMBOL": "GC=F",
             "DXY_SYMBOL": "DX-Y.NYB",
             "RUN_INTERVAL_MIN": 1,
@@ -60,7 +62,6 @@ jobs:
             "OB_MIN_RR": 1.8,
             "UNIFIED_MIN_AGREE": 2,
             "PERF_FILE": "performance.json",
-            "CLAUDE_PROVIDER": "$CLAUDE_PROVIDER",
             "TRIGGER_PRICE_CHANGE_PCT": 0.04,
             "TRIGGER_VOLUME_SPIKE_X": 1.8,
             "TRIGGER_NEW_CANDLE_5M": true,
@@ -68,6 +69,9 @@ jobs:
             "TRIGGER_FORCE_EVERY_MIN": 5
           }
           CFGEOF
+          echo "✅ config.json created"
+          echo "Provider: $CLAUDE_PROVIDER"
+          echo "API Key length: ${#CLAUDE_API_KEY}"
 
       - name: 💾 Restore state
         uses: actions/cache@v4
