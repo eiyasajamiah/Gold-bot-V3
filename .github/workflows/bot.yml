@@ -1,12 +1,14 @@
-name: 🥇 Gold Bot v3.0
+name: 🥇 Gold Bot v3.0 — يعمل 24/7
 
 permissions:
-  contents: read
+  contents: write
 
 on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
   run-bot:
@@ -16,6 +18,8 @@ jobs:
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🐍 Setup Python 3.11
         uses: actions/setup-python@v5
@@ -69,9 +73,7 @@ jobs:
             "TRIGGER_FORCE_EVERY_MIN": 5
           }
           CFGEOF
-          echo "✅ config.json created"
-          echo "Provider: $CLAUDE_PROVIDER"
-          echo "API Key length: ${#CLAUDE_API_KEY}"
+          echo "✅ Config | Provider=$CLAUDE_PROVIDER | Key=${#CLAUDE_API_KEY} chars"
 
       - name: 💾 Restore state
         uses: actions/cache@v4
@@ -86,7 +88,7 @@ jobs:
       - name: 📁 Create directories
         run: mkdir -p charts logs
 
-      - name: 🚀 Run Gold Bot
+      - name: 🚀 Run Gold Bot (4 دقائق)
         run: timeout 240 python unified_gold_bot.py || true
         env:
           PYTHONUNBUFFERED: "1"
@@ -101,10 +103,20 @@ jobs:
             ob_signals.json
           key: bot-state-${{ github.run_number }}
 
+      - name: 🔄 Keep Alive — منع التوقف التلقائي
+        if: github.event_name == 'schedule'
+        run: |
+          git config user.email "goldbot@github.com"
+          git config user.name "Gold Bot"
+          echo "$(date -u '+%Y-%m-%d %H:%M:%S UTC')" > .last_run
+          git add .last_run
+          git diff --staged --quiet || git commit -m "⏱ keep-alive $(date -u '+%H:%M')"
+          git push || true
+
       - name: 📋 Upload logs
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: bot-logs-${{ github.run_number }}
+          name: gold-logs-${{ github.run_number }}
           path: logs/
           retention-days: 7
