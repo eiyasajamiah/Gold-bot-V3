@@ -11,7 +11,6 @@ print("=" * 55)
 print("🔍 تشخيص اتصال PPQ.AI API")
 print("=" * 55)
 
-# ── قراءة config ──
 CFG_FILE = "config.json"
 if not os.path.exists(CFG_FILE):
     print(f"❌ ملف {CFG_FILE} غير موجود!")
@@ -22,7 +21,6 @@ if not os.path.exists(CFG_FILE):
 
 cfg = json.load(open(CFG_FILE, encoding="utf-8"))
 
-# ── فحص المفاتيح ──
 print("\n📋 فحص الإعدادات:")
 api_key  = cfg.get("CLAUDE_API_KEY","").strip()
 provider = cfg.get("CLAUDE_PROVIDER","anthropic").strip()
@@ -30,7 +28,7 @@ tg_token = cfg.get("TELEGRAM_TOKEN","").strip()
 tg_chat  = cfg.get("TELEGRAM_CHAT_ID","").strip()
 
 print(f"  CLAUDE_API_KEY  : {'✅ موجود ('+api_key[:8]+'...)' if api_key else '❌ فارغ!'}")
-print(f"  CLAUDE_PROVIDER : {'✅ '+provider if provider else '❌ فارغ (سيستخدم anthropic)'}")
+print(f"  CLAUDE_PROVIDER : {'✅ '+provider if provider else '❌ فارغ'}")
 print(f"  TELEGRAM_TOKEN  : {'✅ موجود' if tg_token else '❌ فارغ!'}")
 print(f"  TELEGRAM_CHAT_ID: {'✅ موجود' if tg_chat else '❌ فارغ!'}")
 
@@ -38,7 +36,6 @@ if not api_key:
     print("\n❌ CLAUDE_API_KEY فارغ — لا يمكن المتابعة")
     sys.exit(1)
 
-# ── تحديد الـ endpoint ──
 ENDPOINTS = {
     "ppq":       ("https://api.ppq.ai/chat/completions",   "openai"),
     "anthropic": ("https://api.anthropic.com/v1/messages", "anthropic"),
@@ -47,7 +44,6 @@ url, fmt = ENDPOINTS.get(provider, ENDPOINTS["anthropic"])
 print(f"\n🌐 سيتم الاتصال بـ: {url}")
 print(f"   صيغة الطلب: {fmt}")
 
-# ── اختبار الاتصال ──
 print("\n⏳ اختبار الاتصال...")
 
 if fmt == "openai":
@@ -56,9 +52,9 @@ if fmt == "openai":
         "Content-Type":  "application/json",
     }
     payload = {
-        "model":    "claude-sonnet-4-5",
+        "model":      "claude-sonnet-4-6",
         "max_tokens": 50,
-        "messages": [{"role":"user","content":"قل: اتصال ناجح"}],
+        "messages":   [{"role":"user","content":"قل: اتصال ناجح"}],
     }
 else:
     headers = {
@@ -67,7 +63,7 @@ else:
         "Content-Type":      "application/json",
     }
     payload = {
-        "model":      "claude-sonnet-4-5",
+        "model":      "claude-sonnet-4-6",
         "max_tokens": 50,
         "messages":   [{"role":"user","content":"قل: اتصال ناجح"}],
     }
@@ -79,31 +75,22 @@ try:
     if resp.status_code == 200:
         data = resp.json()
         if fmt == "openai":
-            text = data["choices"][0]["message"]["content"]
+            text = data["choices"]^0^["message"]["content"]
         else:
-            text = data["content"][0]["text"]
+            text = data["content"]^0^["text"]
         print(f"   ✅ استجابة Claude: {text.strip()}")
 
     elif resp.status_code == 401:
         print("   ❌ خطأ 401 — مفتاح API خاطئ أو منتهي الصلاحية")
-        print("   تحقق من CLAUDE_API_KEY في الإعدادات")
-
     elif resp.status_code == 402:
         print("   ❌ خطأ 402 — رصيد PPQ.AI غير كافٍ")
-        print("   اشحن رصيدك على ppq.ai")
-
     elif resp.status_code == 403:
         print("   ❌ خطأ 403 — صلاحية مرفوضة")
         print(f"   تفاصيل: {resp.text[:200]}")
-
     elif resp.status_code == 404:
         print(f"   ❌ خطأ 404 — الـ endpoint غير صحيح: {url}")
-        if provider == "ppq":
-            print("   تأكد أن CLAUDE_PROVIDER=ppq في config.json")
-
     elif resp.status_code == 429:
         print("   ⚠️ خطأ 429 — تجاوزت حد الطلبات، انتظر دقيقة")
-
     else:
         print(f"   ❌ خطأ غير متوقع: {resp.text[:300]}")
 
@@ -114,7 +101,6 @@ except requests.exceptions.Timeout:
 except Exception as e:
     print(f"   ❌ خطأ: {e}")
 
-# ── اختبار تيليغرام ──
 print("\n⏳ اختبار تيليغرام...")
 if tg_token and tg_chat:
     try:
@@ -125,8 +111,6 @@ if tg_token and tg_chat:
         if r.ok:
             bot_name = r.json().get("result",{}).get("username","?")
             print(f"   ✅ بوت تيليغرام: @{bot_name}")
-
-            # إرسال رسالة تجريبية
             r2 = requests.post(
                 f"https://api.telegram.org/bot{tg_token}/sendMessage",
                 data={"chat_id": tg_chat,
