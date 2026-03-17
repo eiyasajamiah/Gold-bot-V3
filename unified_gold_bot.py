@@ -1651,7 +1651,7 @@ _AI_PROVIDERS = {
         # PPQ.AI — يستخدم OpenAI format
         # النموذج المضمون العمل (تحقق من ppq.ai/api-docs → Chat Models)
         "url":     "https://api.ppq.ai/chat/completions",
-        "model":   cfg.get("CLAUDE_MODEL","") or "claude-sonnet-4-5",
+        "model":   cfg.get("CLAUDE_MODEL","") or "claude-sonnet-4.6",
         "headers": lambda key: {
             "Authorization":  f"Bearer {key}",
             "content-type":   "application/json",
