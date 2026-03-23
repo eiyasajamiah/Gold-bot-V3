@@ -3663,7 +3663,7 @@ def _pu_prime_ad(signal_dir: int = 0) -> str:
 def msg_signal(v7: dict, smc: dict, ob: dict, agg: dict, trigger_reasons: list, sq: dict = None, cm: dict = None) -> str:
     d=agg["d"]; os_=ob.get("signal")
     lines=[
-        f"{'📈' if d==1 else '📉'} <b>إشارة البيتكوين موحّدة — XAU/USD</b>",
+        f"{'📈' if d==1 else '📉'} <b>إشارة الذهب موحّدة — XAU/USD</b>",
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
         f"🎯 <b>الاتجاه: {agg['lbl']}</b>",
         f"📊 توافق: <b>{agg['agree']}/3</b>  |  ثقة: <b>{agg['conf']}%</b>  {stars(agg['conf'],100)}",
